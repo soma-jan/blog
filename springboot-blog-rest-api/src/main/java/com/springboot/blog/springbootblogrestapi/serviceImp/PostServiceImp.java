@@ -35,6 +35,23 @@ public class PostServiceImp implements PostService {
         return mapToDto(post);
     }
 
+    @Override
+    public PostDto updatePost(PostDto postdto, Long id) {
+        Post post = postrepository.findById(id).orElseThrow(()-> new ResourceNotFound("post","id",id));
+        post.setTitle(postdto.getTitle());
+        post.setDescription(postdto.getDescription());
+        post.setContent(postdto.getContent());
+        Post updatedpost= postrepository.save(post);
+        return mapToDto(updatedpost);
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        Post post = postrepository.findById(id).orElseThrow(()-> new ResourceNotFound("post","id",id));
+         postrepository.delete(post);
+
+    }
+
     public Post mapToEntity(PostDto postdto){
 
         Post post = new Post();
