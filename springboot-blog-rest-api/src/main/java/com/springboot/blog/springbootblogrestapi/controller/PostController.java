@@ -1,6 +1,7 @@
 package com.springboot.blog.springbootblogrestapi.controller;
 
 import com.springboot.blog.springbootblogrestapi.dto.PostDto;
+import com.springboot.blog.springbootblogrestapi.dto.PostResponse;
 import com.springboot.blog.springbootblogrestapi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,10 @@ public class PostController {
         return new ResponseEntity<>(postservice.createPost(postdto), HttpStatus.CREATED);
     }
     @GetMapping
-    public List<PostDto> getPost(){
-        return postservice.getPost();
+    public PostResponse getPost(@RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
+                                @RequestParam(value = "pageSize",defaultValue = "5",required = false) int pageSize,
+                                @RequestParam(value = "sortBy",defaultValue = "id",required = false) String sortBy ){
+        return postservice.getPost(pageNo,pageSize,sortBy);
     }
     @GetMapping("/{id}")
     public ResponseEntity<PostDto>getPostById(@PathVariable(name = "id") Long id){
@@ -35,7 +38,7 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String>deletePostById(@PathVariable(name = "id") Long id){
             postservice.deletePostById(id);
-            return new ResponseEntity<>("Post entity of id:%s is deleted successfully",HttpStatus.OK);
+            return new ResponseEntity<>("Post entity of id:"+id+" is deleted successfully",HttpStatus.OK);
     }
 
 }
